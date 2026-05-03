@@ -1,0 +1,55 @@
+#include <stdio.h>
+#define INF 999999
+
+struct Edge {
+    int u, v, w;
+};
+
+int main() {
+    int n, m, src;
+    scanf("%d %d", &n, &m);
+
+    struct Edge edges[m];
+
+    for (int i = 0; i < m; i++)
+        scanf("%d %d %d", &edges[i].u, &edges[i].v, &edges[i].w);
+
+    scanf("%d", &src);
+
+    int dist[100];
+
+    for (int i = 0; i < n; i++)
+        dist[i] = INF;
+
+    dist[src] = 0;
+
+    // Relax edges n-1 times
+    for (int i = 1; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            int u = edges[j].u;
+            int v = edges[j].v;
+            int w = edges[j].w;
+
+            if (dist[u] != INF && dist[u] + w < dist[v])
+                dist[v] = dist[u] + w;
+        }
+    }
+
+    // Check negative cycle
+    for (int j = 0; j < m; j++) {
+        int u = edges[j].u;
+        int v = edges[j].v;
+        int w = edges[j].w;
+
+        if (dist[u] != INF && dist[u] + w < dist[v]) {
+            printf("NEGATIVE CYCLE");
+            return 0;
+        }
+    }
+
+    // Print distances
+    for (int i = 0; i < n; i++)
+        printf("%d ", dist[i]);
+
+    return 0;
+}
