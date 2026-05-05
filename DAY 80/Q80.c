@@ -1,0 +1,57 @@
+#include <stdio.h>
+
+void floydWarshall(int n, int graph[n][n]) {
+    int dist[n][n];
+
+    // Initialize distance matrix
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            dist[i][j] = graph[i][j];
+        }
+    }
+
+    // Floyd-Warshall algorithm
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dist[i][k] != INF && dist[k][j] != INF &&
+                    dist[i][k] + dist[k][j] < dist[i][j]) {
+                    
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
+
+    // Print result
+    printf("Shortest distance matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (dist[i][j] == INF)
+                printf("INF ");
+            else
+                printf("%d ", dist[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int n;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    int graph[n][n];
+
+    printf("Enter adjacency matrix (use %d for INF):\n", INF);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &graph[i][j]);
+        }
+    }
+
+    floydWarshall(n, graph);
+
+    return 0;
+}
